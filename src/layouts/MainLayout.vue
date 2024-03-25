@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="false"
           flat
           dense
           round
@@ -15,11 +16,12 @@
           Url Shortener
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <!-- <div>Quasar v{{ $q.version }}</div> -->
       </q-toolbar>
     </q-header>
 
     <q-drawer
+      v-if="false"
       v-model="leftDrawerOpen"
       show-if-above
       bordered
