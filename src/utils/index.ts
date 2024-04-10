@@ -6,4 +6,5 @@ export * from './nullable'
 export * from './replaceAll'
 export * from './status-codes'
 export * from './storage'
+export * from './rules'
 

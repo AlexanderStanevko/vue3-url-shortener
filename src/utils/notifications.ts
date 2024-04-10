@@ -39,7 +39,7 @@ export const notificationAlert = (options: QNotifyCreateOptions) => {
 export const notificationSuccess = (options: QNotifyCreateOptions) => {
   const {
     actions = [DISMISS_ACTION],
-    color = 'green-1',
+    color = 'positive',
     position = 'top',
     progress = true,
     timeout = 5000,
