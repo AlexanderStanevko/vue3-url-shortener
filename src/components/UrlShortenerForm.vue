@@ -5,10 +5,11 @@
         <h4 class="h4 text-dark text-center">Paste the URL to be shortened</h4>
       </template>
       <template #default>
-        <q-form @submit.prevent="onSubmit" @reset="onReset">
+        <q-form ref="form" @submit.prevent="onSubmit" @reset="onReset">
           <div class="row">
             <div class="col-8">
               <q-input
+                ref="urlInput"
                 filled
                 v-model="url"
                 label="URL *"
@@ -28,7 +29,9 @@
               />
             </div>
           </div>
-          <p v-if="result" class="text-dark text-center">Shortened URL: {{ result }}</p>
+          <p v-if="result" class="text-dark text-center">
+            Shortened URL: {{ result }}
+          </p>
         </q-form>
       </template>
       <template #footer>
@@ -42,12 +45,13 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, nextTick } from 'vue';
 import { notificationSuccess } from 'utils/notifications';
 import AppCard from 'components/App/AppCard.vue';
 import { urlFieldRules } from 'utils/rules';
 import { urlShortener } from 'utils/urlShortener';
 import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
+import { QInput } from 'quasar';
 
 export default defineComponent({
   name: 'UrlShortenerForm',
@@ -68,9 +72,14 @@ export default defineComponent({
   setup() {
     const url = ref('');
     const result = ref('');
+    const urlInput = ref<InstanceType<typeof QInput> | null>(null);
 
-    const onReset = () => {
+    const onReset = async () => {
       url.value = '';
+      if (urlInput.value && urlInput.value.resetValidation) {
+        urlInput.value.resetValidation();
+        await nextTick();
+      }
     };
 
     const onSubmit = () => {
@@ -90,6 +99,7 @@ export default defineComponent({
       onReset,
       result,
       urlFieldRules,
+      urlInput,
     };
   },
 });
