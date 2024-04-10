@@ -36,7 +36,7 @@ export default defineComponent({
 }
 .animated-welcome {
   animation: fadeIn 2s ease-in-out;
-  font-size: 24px;
+  font-size: 44px;
   font-weight: bold;
   color: #1976D2;
 }

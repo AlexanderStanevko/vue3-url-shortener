@@ -98,7 +98,6 @@ export default defineComponent({
         message: 'Your account has been successfully created',
       });
 
-      onReset();
       router.push({
         name: 'Account',
       });
