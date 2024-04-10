@@ -1,7 +1,9 @@
 <template>
   <div>
     <h1>Url Shortener</h1>
-    <h4 class="text-center">Coming soon...</h4>
+    <h4 class="text-center">
+      Coming soon...
+    </h4>
 
     <div class="text-center">
       <q-spinner-hourglass
@@ -20,7 +22,7 @@ interface Props {
   todos?: Todo[];
   meta: Meta;
   active: boolean;
-};
+}
 
 withDefaults(defineProps<Props>(), {
   todos: () => []

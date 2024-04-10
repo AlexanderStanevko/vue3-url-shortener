@@ -1,7 +1,14 @@
-import { useUserStore } from 'stores/UserStore'
+import { NavigationGuardNext, RouteLocationNormalized } from 'vue-router';
+import { useUserStore } from 'stores/UserStore';
 
-export default ({ to, next, nextMiddleware }) => {
-  const userStore = useUserStore()
+interface MiddlewareContext {
+  to: RouteLocationNormalized;
+  next: NavigationGuardNext;
+  nextMiddleware: () => void;
+}
+
+export default ({ to, next, nextMiddleware }: MiddlewareContext): void => {
+  const userStore = useUserStore();
 
   if (!userStore.isLoggedIn) {
     return next({
@@ -9,8 +16,8 @@ export default ({ to, next, nextMiddleware }) => {
       query: {
         redirect: to.fullPath,
       },
-    })
+    });
   }
 
-  nextMiddleware()
-}
+  nextMiddleware();
+};

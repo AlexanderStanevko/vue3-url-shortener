@@ -1,0 +1,13 @@
+// Check if the device supports hover
+@mixin has-hover {
+  @media (hover: hover), (-ms-high-contrast: none) {
+    @content;
+  }
+}
+
+// Check if the device supports touch
+@mixin has-touch {
+  @media (pointer: coarse) {
+    @content;
+  }
+}

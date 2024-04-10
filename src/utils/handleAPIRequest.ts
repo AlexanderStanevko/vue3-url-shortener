@@ -1,10 +1,9 @@
-import axios, { AxiosRequestConfig } from 'axios'
-import { errorHandler } from 'utils/errroHandling'
-import { JWT_STORAGE_KEY } from 'utils/global'
-import { errorAlert } from 'utils/notifications'
-import { Nullable } from 'utils/nullable'
-import { SessionStorage } from 'utils/storage'
-import { ErrorResponse } from 'types'
+import axios, { AxiosRequestConfig } from 'axios';
+import { JWT_STORAGE_KEY } from 'utils/global';
+import { errorAlert } from 'utils/notifications';
+import { Nullable } from 'utils/nullable';
+import { SessionStorage } from 'utils/storage';
+import { ErrorResponse } from 'types';
 
 type HandleAPIRequestArgs<T> = {
   controller?: Nullable<string>;
@@ -14,7 +13,7 @@ type HandleAPIRequestArgs<T> = {
   params?: Record<string, unknown>;
   baseURL?: string;
   headers?: Record<string, string>;
-}
+};
 
 type ExtendedResponse<T> = T & ErrorResponse;
 
@@ -30,12 +29,11 @@ export const handleAPIRequest = async <
   params = {},
   baseURL = process.env.API_URL,
   headers = {},
-}: HandleAPIRequestArgs<RequestBodyType>): Promise<Nullable<ExtendedResponse<ResponseType>>> => {
-
+}: HandleAPIRequestArgs<RequestBodyType>): Promise<
+  Nullable<ExtendedResponse<ResponseType>>
+> => {
   try {
-    const url = controller
-      ? `${controller}/${method}`
-      : method
+    const url = controller ? `${controller}/${method}` : method;
 
     const axiosConfig: AxiosRequestConfig = {
       baseURL,
@@ -44,39 +42,46 @@ export const handleAPIRequest = async <
         ...headers,
       },
       params,
-    }
+    };
 
-    const jwt = SessionStorage.get(JWT_STORAGE_KEY)
+    const jwt = SessionStorage.get(JWT_STORAGE_KEY);
 
     if (jwt && axiosConfig.headers) {
-      axiosConfig.headers.Authorization = `Bearer ${jwt}`
+      axiosConfig.headers.Authorization = `Bearer ${jwt}`;
     }
 
-
-    let response = null
+    let response = null;
 
     if (httpMethod === 'get') {
-      response = (await axios.get<ExtendedResponse<ResponseType>>(url, axiosConfig)).data
+      response = (
+        await axios.get<ExtendedResponse<ResponseType>>(url, axiosConfig)
+      ).data;
     } else {
-      response = (await axios[httpMethod]<ExtendedResponse<ResponseType>>(url, {
-        ...body,
-      }, axiosConfig)).data
+      response = (
+        await axios[httpMethod]<ExtendedResponse<ResponseType>>(
+          url,
+          {
+            ...body,
+          },
+          axiosConfig
+        )
+      ).data;
     }
 
     if (response.error) {
       const message = Array.isArray(response.error)
         ? response.error[0].message
-        : response.message || response?.error
+        : response.message || response?.error;
 
-      throw new Error(message)
+      throw new Error(message);
     }
 
-    return response
-  } catch (error: Error) {
-    const message = errorHandler(error)
+    return response;
+  } catch (error: unknown) {
+    const message = String(error);
 
-    errorAlert({ message })
+    errorAlert({ message });
 
-    return null
+    return null;
   }
-}
+};

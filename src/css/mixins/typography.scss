@@ -1,0 +1,83 @@
+@mixin h1-mobile {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 24px;
+  letter-spacing: normal;
+}
+
+@mixin h1-desktop {
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 48px;
+  letter-spacing: normal;
+}
+
+@mixin h2-mobile {
+  font-weight: 800;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: normal;
+}
+
+@mixin h2-desktop {
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 36px;
+  letter-spacing: normal;
+}
+
+@mixin h3-mobile {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: normal;
+}
+
+@mixin h3-desktop {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 24px;
+  letter-spacing: normal;
+}
+
+@mixin h4-mobile {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: normal;
+}
+
+@mixin h4-desktop {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: normal;
+}
+
+@mixin h5-mobile {
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: normal;
+}
+
+@mixin h5-desktop {
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: normal;
+}
+
+@mixin h6-mobile {
+  font-weight: 800;
+  font-size: 8px;
+  line-height: 10px;
+  letter-spacing: 0.04em;
+}
+
+@mixin h6-desktop {
+  font-weight: 800;
+  font-size: 12px;
+  line-height: 15px;
+  letter-spacing: 0.04em;
+}

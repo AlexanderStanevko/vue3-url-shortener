@@ -69,8 +69,6 @@ module.exports = {
     // 'plugin:vue/vue3-essential', // Priority A: Essential (Error Prevention)
     // 'plugin:vue/vue3-strongly-recommended', // Priority B: Strongly Recommended (Improving Readability)
     'plugin:vue/vue3-recommended', // Priority C: Recommended (Minimizing Arbitrary Choices and Cognitive Overhead)
-
-    '@tenging/eslint-config-js/vue',
   ],
 
   plugins: [
@@ -102,11 +100,6 @@ module.exports = {
       files: [
         '**/*.cy.{js,jsx,ts,tsx}',
         'test/**/*.{js,jsx,ts,tsx}',
-      ],
-      extends: [
-        // Add Cypress-specific lint rules, globals and Cypress plugin
-        // See https://github.com/cypress-io/eslint-plugin-cypress#rules
-        'plugin:cypress/recommended',
       ],
       rules: {
         'max-nested-callbacks': 'off',

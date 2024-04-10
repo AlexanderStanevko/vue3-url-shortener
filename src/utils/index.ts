@@ -4,7 +4,6 @@ export * from './highlight'
 export * from './notifications'
 export * from './nullable'
 export * from './replaceAll'
-export * from './router'
 export * from './status-codes'
 export * from './storage'
 

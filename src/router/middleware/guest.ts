@@ -1,13 +1,18 @@
-import { useUserStore } from 'stores/UserStore'
+import { RouteLocationRaw, NavigationGuardNext } from 'vue-router';
+import { useUserStore } from 'stores/UserStore';
+interface MiddlewareContext {
+  next: NavigationGuardNext;
+  nextMiddleware: () => void;
+}
 
-export default ({ next, nextMiddleware }) => {
-  const userStore = useUserStore()
+export default ({ next, nextMiddleware }: MiddlewareContext) => {
+  const userStore = useUserStore();
 
   if (userStore.isLoggedIn) {
     return next({
       name: 'IndexPage',
-    })
+    } as RouteLocationRaw);
   }
 
-  nextMiddleware()
-}
+  nextMiddleware();
+};
