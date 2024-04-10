@@ -11,3 +11,21 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.gap {
+  &__10 {
+    gap: 10px;
+  }
+
+  &__20 {
+    gap: 20px;
+  }
+
+  &__30 {
+    gap: 40px;
+  }
+
+  &__50 {
+    gap: 50px;
+  }
+}

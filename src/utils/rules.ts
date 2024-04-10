@@ -6,8 +6,8 @@ export const isValidEmail = (email: string) => {
 };
 
 export const emailFieldRules = [
-  (val: string) => (val && val.length) || 'fieldRequired',
-  (val: string) => isValidEmail(val) || 'invalidEmail',
+  (val: string) => (val && val.length) || 'Field is required!',
+  (val: string) => isValidEmail(val) || 'Please enter a valid email!',
 ];
 
 export const isValidUrl = (url: string): string | true => {
@@ -21,10 +21,20 @@ export const isValidUrl = (url: string): string | true => {
       '(\\#[-a-zA-Z\\d_]*)?$',
     'i'
   );
-  return urlPattern.test(url) || 'Введите валидный URL!';
+  return urlPattern.test(url) || 'Please enter a valid URL!';
 };
 
 export const urlFieldRules = [
-  (val: string) => (val && val.length) || 'Обязательное поле!',
+  (val: string) => (val && val.length) || 'Field is required!',
   isValidUrl,
+];
+
+export const isValidPhone = (phone: string): string | true => {
+  const phonePattern = /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+  return phonePattern.test(phone) || 'Please enter a valid phone number!';
+};
+
+export const phoneFieldRules = [
+  (val: string) => (val && val.length) || 'Field is required!',
+  isValidPhone,
 ];

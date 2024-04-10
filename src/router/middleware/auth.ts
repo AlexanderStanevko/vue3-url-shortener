@@ -12,10 +12,7 @@ export default ({ to, next, nextMiddleware }: MiddlewareContext): void => {
 
   if (!userStore.isLoggedIn) {
     return next({
-      name: 'login',
-      query: {
-        redirect: to.fullPath,
-      },
+      name: '',
     });
   }
 

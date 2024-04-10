@@ -36,6 +36,7 @@ export default defineComponent({
 .app-card {
   width: 100%;
   max-width: 758px;
+  min-height: 360px;
   border-radius: 4px;
 }
 </style>

@@ -1,34 +1,30 @@
-import { defineStore } from 'pinia'
-import {
-    User
-} from 'types'
-
+import { defineStore } from 'pinia';
+import { User } from 'types';
 
 type UserState = User & {
-  isLoading: boolean;
   token: string;
-}
+};
 
 export const useUserStore = defineStore({
   id: 'UserStore',
 
-  state: () => ({
-    name: '',
-    isLoading: false,
-    token: '',
-  } as UserState),
+  state: () =>
+    ({
+      userData: null,
+      token: '',
+    } as UserState),
 
   getters: {
-    isLoggedIn: (state) => Boolean(state.token),
+    isLoggedIn: (state) => Boolean(state.userData?.email),
   },
 
   actions: {
-    
-
-    logout () {
-      this.token = ''
-      this.name = ''
-      this.isLoading = false
+    createUser(userData: User['userData']) {
+      this.userData = userData;
+    },
+    logout() {
+      this.token = '';
+      this.userData = null;
     },
   },
-})
+});

@@ -6,7 +6,7 @@
       </template>
       <template #default>
         <q-form @submit.prevent="onSubmit" @reset="onReset">
-          <div class="row col-12">
+          <div class="row">
             <div class="col-8">
               <q-input
                 filled
