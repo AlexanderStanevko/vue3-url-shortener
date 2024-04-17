@@ -7,8 +7,8 @@
       <template #default>
         <q-form @submit.prevent="onSubmit" @reset="onReset">
           <q-input
-            filled
             v-model="name"
+            filled
             label="Full name *"
             lazy-rules
             square
@@ -16,8 +16,8 @@
             :rules="[(value) => value.length > 0]"
           />
           <q-input
-            filled
             v-model="email"
+            filled
             label="Email *"
             lazy-rules
             square
@@ -25,17 +25,41 @@
             class="full-width q-my-md"
           />
           <q-input
+            v-model="password"
             filled
-            v-model="phone"
-            label="Phone number *"
-            type="tel"
-            mask="(###) ###-####"
-            unmasked-value
+            label="Password *"
+            :type="showPassword ? 'text' : 'password'"
             lazy-rules
             square
-            :rules="phoneFieldRules"
+            :rules="passwordFieldRules"
             class="full-width q-my-md"
-          />
+          >
+            <template #append>
+              <q-icon
+                :name="showPassword ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="togglePasswordVisibility"
+              />
+            </template>
+          </q-input>
+          <q-input
+            v-model="passwordConfirm"
+            filled
+            label="Confirm Password *"
+            :type="showPassword ? 'text' : 'password'"
+            lazy-rules
+            :rules="[(val) => val === password || 'Passwords do not match!']"
+            square
+            class="full-width q-my-md"
+          >
+            <template #append>
+              <q-icon
+                :name="showPassword ? 'visibility_off' : 'visibility'"
+                class="cursor-pointer"
+                @click="togglePasswordVisibility"
+              />
+            </template>
+          </q-input>
           <div class="row">
             <div class="col">
               <AppRoundedBtn
@@ -60,12 +84,12 @@
 
 <script lang="ts">
 import { ref, defineComponent } from 'vue';
-import { notificationSuccess } from 'utils/notifications';
-import AppCard from 'components/App/AppCard.vue';
-import { emailFieldRules, phoneFieldRules } from 'utils/rules';
-import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from 'stores/UserStore';
+import { notificationSuccess } from 'utils/notifications';
+import { emailFieldRules, passwordFieldRules } from 'utils/rules';
+import AppCard from 'components/App/AppCard.vue';
+import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
 
 export default defineComponent({
   name: 'AccountCreationForm',
@@ -79,19 +103,27 @@ export default defineComponent({
 
     const name = ref('');
     const email = ref('');
-    const phone = ref('');
+    const password = ref('');
+    const passwordConfirm = ref('');
+    const showPassword = ref(false);
+
+    const togglePasswordVisibility = () => {
+      showPassword.value = !showPassword.value;
+    };
 
     const onReset = () => {
       name.value = '';
       email.value = '';
-      phone.value = '';
+      password.value = '';
+      passwordConfirm.value = '';
+      showPassword.value = false;
     };
 
     const onSubmit = () => {
       userStore.createUser({
         name: name.value,
         email: email.value,
-        phone: phone.value,
+        password: password.value,
       });
 
       notificationSuccess({
@@ -106,11 +138,14 @@ export default defineComponent({
     return {
       name,
       email,
-      phone,
+      password,
+      passwordConfirm,
       onSubmit,
       onReset,
+      showPassword,
+      togglePasswordVisibility,
       emailFieldRules,
-      phoneFieldRules,
+      passwordFieldRules,
     };
   },
 });

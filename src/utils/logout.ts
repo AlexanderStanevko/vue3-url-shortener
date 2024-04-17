@@ -6,7 +6,7 @@ export const useLogout = () => {
   const userStore = useUserStore()
 
   return () => {
-    router.push({ name: 'login' })
+    router.push({ path: '/' })
     userStore.logout()
   }
 }

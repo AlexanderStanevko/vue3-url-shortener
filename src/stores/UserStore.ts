@@ -10,7 +10,11 @@ export const useUserStore = defineStore({
 
   state: () =>
     ({
-      userData: null,
+      userData: {
+        name: 'sadasda',
+        email: 'sdasdas@gmail.com',
+        password: '^^*&(*)()V&BUJKBY@*&^*&*((Ny@@@0*&^%5678&VBNmj'
+      },
       token: '',
     } as UserState),
 

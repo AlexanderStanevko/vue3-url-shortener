@@ -10,7 +10,7 @@ export default ({ next, nextMiddleware }: MiddlewareContext) => {
 
   if (userStore.isLoggedIn) {
     return next({
-      name: 'IndexPage',
+      name: 'Account',
     } as RouteLocationRaw);
   }
 

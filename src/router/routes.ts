@@ -1,20 +1,47 @@
 import { RouteRecordRaw } from 'vue-router';
-import auth from 'router/middleware/auth'
+// import guest from 'router/middleware/guest';
+import auth from 'router/middleware/auth';
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('layouts/BaseLayout.vue'),
     children: [
-      { path: '', component: () => import('app/src/pages/MainPage.vue') },
       {
-        path: '/create',
+        path: '',
+        name: 'Main',
+        component: () => import('app/src/pages/MainPage.vue'),
+      },
+      {
+        path: 'create',
         name: 'CreateAccount',
         component: () => import('app/src/pages/CreateAccount.vue'),
       },
+    ],
+  },
+  {
+    path: '/app',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
       {
-        path: '/account',
+        path: 'account',
         name: 'Account',
+        component: () => import('app/src/pages/AccountPage.vue'),
+        meta: {
+          middleware: [auth],
+        },
+      },
+      {
+        path: 'links',
+        name: 'Links',
+        component: () => import('app/src/pages/AccountPage.vue'),
+        meta: {
+          middleware: [auth],
+        },
+      },
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
         component: () => import('app/src/pages/AccountPage.vue'),
         meta: {
           middleware: [auth],
@@ -22,8 +49,7 @@ const routes: RouteRecordRaw[] = [
       },
     ],
   },
-
-  // Always leave this as last one,
+  // Always leave this as the last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',

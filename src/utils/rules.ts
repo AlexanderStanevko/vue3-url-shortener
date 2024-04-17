@@ -38,3 +38,14 @@ export const phoneFieldRules = [
   (val: string) => (val && val.length) || 'Field is required!',
   isValidPhone,
 ];
+
+export const isValidPassword = (password: string): string | true => {
+  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+  return passwordPattern.test(password) || 'Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character!';
+};
+
+
+export const passwordFieldRules = [
+  (val: string) => (val && val.length) || 'Field is required!',
+  isValidPassword,
+];
