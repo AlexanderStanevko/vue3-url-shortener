@@ -13,13 +13,14 @@ export const useUserStore = defineStore({
       userData: {
         name: 'sadasda',
         email: 'sdasdas@gmail.com',
-        password: '^^*&(*)()V&BUJKBY@*&^*&*((Ny@@@0*&^%5678&VBNmj'
+        password: '^^*&(*)()V&BUJKBY@*&^*&*((Ny@@@0*&^%5678&VBNmj',
       },
       token: '',
     } as UserState),
 
   getters: {
     isLoggedIn: (state) => Boolean(state.userData?.email),
+    getUserName: (state) => state.userData?.name,
   },
 
   actions: {

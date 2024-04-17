@@ -3,10 +3,16 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          <q-icon name="public" style="font-size: 40px" />
+          <q-icon
+            name="public"
+            style="font-size: 40px"
+          />
           {{ mainLabel }}
         </q-toolbar-title>
-        <q-tabs align="left" dense>
+        <q-tabs
+          align="left"
+          dense
+        >
           <q-route-tab
             name="dashboard"
             :label="isDesktop ? 'Dashboard' : ''"
@@ -27,16 +33,24 @@
           icon="account_circle"
           style="margin-left: auto"
           stretch
-          :label="isDesktop ? 'Profile' : ''"
+          :label="accountLabel"
         >
           <q-list>
-            <q-item v-close-popup clickable @click="goToSettings">
+            <q-item
+              v-close-popup
+              clickable
+              @click="goToSettings"
+            >
               <q-item-section avatar>
                 <q-icon name="settings" />
               </q-item-section>
               <q-item-section> Settings </q-item-section>
             </q-item>
-            <q-item v-close-popup clickable @click="onLogout">
+            <q-item
+              v-close-popup
+              clickable
+              @click="onLogout"
+            >
               <q-item-section avatar>
                 <q-icon name="exit_to_app" />
               </q-item-section>
@@ -55,6 +69,7 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from 'stores/UserStore';
 import { useLogout } from 'utils/logout';
 import responsive from 'utils/responsive';
 
@@ -62,12 +77,16 @@ export default defineComponent({
   name: 'MainLayout',
   setup() {
     const router = useRouter();
+    const userStore = useUserStore();
     const logout = useLogout();
     const menuOpen = ref(false);
+    const { isDesktop } = responsive;
 
-    const mainLabel = computed(() =>
-      responsive.isDesktop ? 'Url Shortener' : ''
-    );
+    const mainLabel = computed(() => (isDesktop.value ? 'Url Shortener' : ''));
+
+    const accountLabel = computed(
+      () => isDesktop.value ? userStore.getUserName : ''
+    )
     const goToSettings = () => {
       router.push('/settings');
     };
@@ -87,6 +106,7 @@ export default defineComponent({
       toggleMenu,
       menuOpen,
       mainLabel,
+      accountLabel,
     };
   },
 });
