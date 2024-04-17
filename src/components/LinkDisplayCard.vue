@@ -11,13 +11,17 @@
         {{ longLink }}
       </div>
     </div>
-    <div class="clicks-info row col-12 col-md-4 text-right">
+    <div class="clicks-info row col-12 col-md-4 justify-start">
       <div>
         <q-icon name="touch_app" class="clicks-icon" />
-        <span>1 click</span>
+        <span>0 click</span>
       </div>
-      <span class="owner">{{ name }}</span>
-      <span class="date">{{ formattedDate }}</span>
+      <div class="owner">
+        {{ name }}
+      </div>
+      <div class="date">
+        {{ formattedDate }}
+      </div>
     </div>
     <q-icon name="delete" class="delete-icon" @click="emitDelete" />
   </div>
@@ -49,8 +53,17 @@ export default defineComponent({
     const userStore = useUserStore();
 
     const name = computed(() => userStore.getUser?.name);
+
     const formattedDate = computed(() => {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      };
       return new Intl.DateTimeFormat('ru-RU', options).format(new Date());
     });
 
@@ -85,9 +98,10 @@ export default defineComponent({
   border-radius: 8px;
   margin: 8px 0;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  font-size: 19px;
 
   .full-link {
-    font-size: 14px;
+    font-size: 19px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -95,6 +109,7 @@ export default defineComponent({
 
   .delete-icon {
     color: $negative;
+    font-size: 25px;
     cursor: pointer;
   }
 
@@ -115,20 +130,20 @@ export default defineComponent({
 
   .full-link {
     color: #424242;
-    font-size: 0.8rem;
+    font-size: 1rem;
   }
 
   .clicks-info {
     display: flex;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 1rem;
     .owner {
-      margin-left: 16px;
+      // margin-left: 16px;
       font-weight: bold;
     }
-    .date {
-      margin-left: auto;
-    }
+    // .date {
+    //   margin-left: auto;
+    // }
   }
 
   .more-btn {

@@ -27,7 +27,7 @@
             class="shorten-button"
           />
         </div>
-        <div class="link-list">
+        <div class="link-list q-mt-xl">
           <LinkDisplayCard
             v-for="link in links"
             :id="link.id"
@@ -78,7 +78,7 @@ export default defineComponent({
     };
 
     const onSubmit = () => {
-      const newShortLink = `http://short.est/${Math.random()
+      const newShortLink = `${selectedDomain.value}/${Math.random()
         .toString(36)
         .substr(2, 5)}`;
 
@@ -91,8 +91,6 @@ export default defineComponent({
       notificationSuccess({
         message: 'The URL was successfully shortened',
       });
-
-      url.value = '';
     };
 
     return {
