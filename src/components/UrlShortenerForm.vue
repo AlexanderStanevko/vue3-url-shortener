@@ -10,8 +10,8 @@
             <div class="col-8">
               <q-input
                 ref="urlInput"
-                filled
                 v-model="url"
+                filled
                 label="URL *"
                 lazy-rules
                 square
@@ -45,13 +45,13 @@
 </template>
 
 <script lang="ts">
+import { QInput } from 'quasar';
 import { ref, defineComponent, nextTick } from 'vue';
 import { notificationSuccess } from 'utils/notifications';
-import AppCard from 'components/App/AppCard.vue';
 import { urlFieldRules } from 'utils/rules';
 import { urlShortener } from 'utils/urlShortener';
+import AppCard from 'components/App/AppCard.vue';
 import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
-import { QInput } from 'quasar';
 
 export default defineComponent({
   name: 'UrlShortenerForm',
