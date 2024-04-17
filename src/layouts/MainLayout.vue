@@ -4,16 +4,21 @@
       <q-toolbar>
         <q-toolbar-title>
           <q-icon name="public" style="font-size: 40px" />
-          Url Shortener
+          {{ mainLabel }}
         </q-toolbar-title>
         <q-tabs align="left" dense>
-          <q-tab
+          <q-route-tab
             name="dashboard"
-            label="Dashboard"
-            to="/dashboard"
+            :label="isDesktop ? 'Dashboard' : ''"
             icon="dashboard"
+            to="/app/dashboard"
           />
-          <q-tab name="links" label="Links" to="/links" icon="link" />
+          <q-route-tab
+            name="links"
+            :label="isDesktop ? 'Links' : ''"
+            icon="link"
+            to="/app/links"
+          />
         </q-tabs>
         <q-btn-dropdown
           flat
@@ -22,24 +27,20 @@
           icon="account_circle"
           style="margin-left: auto"
           stretch
-          label="Profile"
+          :label="isDesktop ? 'Profile' : ''"
         >
           <q-list>
-            <q-item clickable v-close-popup @click="goToSettings">
+            <q-item v-close-popup clickable @click="goToSettings">
               <q-item-section avatar>
                 <q-icon name="settings" />
               </q-item-section>
-              <q-item-section>
-                Settings
-              </q-item-section>
+              <q-item-section> Settings </q-item-section>
             </q-item>
-            <q-item clickable v-close-popup @click="onLogout">
+            <q-item v-close-popup clickable @click="onLogout">
               <q-item-section avatar>
                 <q-icon name="exit_to_app" />
               </q-item-section>
-              <q-item-section>
-                Logout
-              </q-item-section>
+              <q-item-section> Logout </q-item-section>
             </q-item>
           </q-list>
         </q-btn-dropdown>
@@ -52,9 +53,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLogout } from 'utils/logout';
+import responsive from 'utils/responsive';
 
 export default defineComponent({
   name: 'MainLayout',
@@ -63,10 +65,9 @@ export default defineComponent({
     const logout = useLogout();
     const menuOpen = ref(false);
 
-    const goToProfile = () => {
-      router.push('/profile');
-    };
-
+    const mainLabel = computed(() =>
+      responsive.isDesktop ? 'Url Shortener' : ''
+    );
     const goToSettings = () => {
       router.push('/settings');
     };
@@ -80,11 +81,12 @@ export default defineComponent({
     };
 
     return {
-      goToProfile,
+      ...responsive,
       goToSettings,
       onLogout,
       toggleMenu,
       menuOpen,
+      mainLabel,
     };
   },
 });

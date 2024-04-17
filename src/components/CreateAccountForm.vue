@@ -131,7 +131,7 @@ export default defineComponent({
       });
 
       router.push({
-        name: 'Account',
+        name: 'Dashboard',
       });
     };
 

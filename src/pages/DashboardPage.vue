@@ -2,7 +2,7 @@
   <q-page class="column items-center justify-evenly">
     <div class="animated-welcome">
       Welcome, <span>{{ userName }}</span
-      >!
+      > to Dashboard Page!
     </div>
   </q-page>
 </template>
@@ -12,7 +12,7 @@ import { defineComponent, computed } from 'vue';
 import { useUserStore } from 'stores/UserStore';
 
 export default defineComponent({
-  name: 'AccountPage',
+  name: 'DashboardPage',
   setup() {
     const userStore = useUserStore();
     const userName = computed(() => userStore.userData?.name);

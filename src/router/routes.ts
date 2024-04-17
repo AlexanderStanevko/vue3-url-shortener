@@ -34,7 +34,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'links',
         name: 'Links',
-        component: () => import('app/src/pages/AccountPage.vue'),
+        component: () => import('app/src/pages/LinksPage.vue'),
         meta: {
           middleware: [auth],
         },
@@ -42,7 +42,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'dashboard',
         name: 'Dashboard',
-        component: () => import('app/src/pages/AccountPage.vue'),
+        component: () => import('app/src/pages/DashboardPage.vue'),
         meta: {
           middleware: [auth],
         },
