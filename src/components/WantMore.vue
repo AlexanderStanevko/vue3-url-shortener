@@ -10,7 +10,7 @@
             <p class="text-dark text-center">
               Custom short links, powerful dashboard, detailed analytics, API,
               UTM builder, QR codes, browser extension, app integrations and
-              support
+              support.
             </p>
           </div>
         </div>
@@ -27,6 +27,10 @@
             />
           </div>
         </div>
+        <div class="text-dark text-center q-mt-md">
+          Already have an account?
+          <span class="login-link" @click="onLogin">Log in here.</span>
+        </div>
       </template>
     </AppCard>
   </div>
@@ -34,9 +38,9 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 import AppCard from 'components/App/AppCard.vue';
 import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
-import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'WantMore',
@@ -61,9 +65,23 @@ export default defineComponent({
       router.push({ name: 'CreateAccount' });
     };
 
+    const onLogin = () => {
+      router.push({ name: 'LoginPage' });
+    };
+
     return {
-      onCreateAccount
+      onCreateAccount,
+      onLogin,
     };
   },
 });
 </script>
+<style lang="scss" scoped>
+.login-link {
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: bold;
+  color: $primary;
+}
+
+</style>

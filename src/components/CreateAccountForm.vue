@@ -75,7 +75,8 @@
       <template #footer>
         <p class="text-dark text-center">
           Registering for an account will give you access to all the features
-          and benefits of our service.
+          and benefits of our service. Already have an account?
+          <span class="login-link" @click="goToLogin">Log in</span>.
         </p>
       </template>
     </AppCard>
@@ -135,6 +136,12 @@ export default defineComponent({
       });
     };
 
+    const goToLogin = () => {
+      router.push({
+        name: 'LoginPage',
+      });
+    };
+
     return {
       name,
       email,
@@ -146,6 +153,7 @@ export default defineComponent({
       togglePasswordVisibility,
       emailFieldRules,
       passwordFieldRules,
+      goToLogin,
     };
   },
 });
@@ -155,5 +163,11 @@ export default defineComponent({
 .app-card {
   width: 100%;
   max-width: 758px; /* Adjust the max width as needed */
+}
+.login-link {
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  color: $primary;
 }
 </style>
