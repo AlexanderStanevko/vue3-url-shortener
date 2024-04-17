@@ -85,7 +85,7 @@ export default defineComponent({
     const mainLabel = computed(() => (isDesktop.value ? 'Url Shortener' : ''));
 
     const accountLabel = computed(
-      () => isDesktop.value ? userStore.getUserName : ''
+      () => isDesktop.value ? userStore.getUser?.name : ''
     )
     const goToSettings = () => {
       router.push('/settings');

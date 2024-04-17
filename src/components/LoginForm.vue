@@ -19,10 +19,11 @@
             v-model="password"
             filled
             label="Password *"
-            type="password"
+            :type="showPassword ? 'text' : 'password'"
             lazy-rules
             square
             class="full-width q-my-md"
+            :rules="passwordFieldRules"
           >
             <template #append>
               <q-icon
@@ -46,7 +47,8 @@
       </template>
       <template #footer>
         <p class="text-dark text-center">
-          Don't have an account? <a class="link-url" @click="goToRegister">Register here.</a>
+          Don't have an account?
+          <a class="link-url" @click="goToRegister">Register here.</a>
         </p>
       </template>
     </AppCard>
@@ -56,8 +58,9 @@
 <script lang="ts">
 import { ref, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { notificationSuccess } from 'utils/notifications';
-import { emailFieldRules } from 'utils/rules';
+import { useUserStore } from 'stores/UserStore';
+import { notificationSuccess, errorAlert } from 'utils/notifications';
+import { emailFieldRules, passwordFieldRules } from 'utils/rules';
 import AppCard from 'components/App/AppCard.vue';
 import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
 
@@ -69,6 +72,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
+    const userStore = useUserStore();
 
     const email = ref('');
     const password = ref('');
@@ -78,16 +82,28 @@ export default defineComponent({
       showPassword.value = !showPassword.value;
     };
 
+    const userIdentification = () => {
+      return (
+        userStore.getUser?.email === email.value &&
+        userStore.getUser.password === password.value
+      );
+    };
+
     const onSubmit = () => {
-      // Здесь должен быть вызов API для входа
-      notificationSuccess({
-        message: 'You have successfully logged in',
-      });
+      if (userIdentification()) {
+        notificationSuccess({
+          message: 'You have successfully logged in',
+        });
+      } else {
+        errorAlert({
+          message: 'Wrong credentials',
+        });
+        return;
+      }
       router.push({ name: 'Dashboard' });
     };
 
     const goToRegister = () => {
-      // Перенаправление на страницу регистрации
       router.push({ name: 'CreateAccount' });
     };
 
@@ -99,6 +115,7 @@ export default defineComponent({
       togglePasswordVisibility,
       goToRegister,
       emailFieldRules,
+      passwordFieldRules,
     };
   },
 });

@@ -11,16 +11,16 @@ export const useUserStore = defineStore({
   state: () =>
     ({
       userData: {
-        name: 'sadasda',
-        email: 'sdasdas@gmail.com',
-        password: '^^*&(*)()V&BUJKBY@*&^*&*((Ny@@@0*&^%5678&VBNmj',
+        name: 'ALEXANDER',
+        email: 'test@gmail.com',
+        password: '!1234qweQWE',
       },
       token: '',
     } as UserState),
 
   getters: {
     isLoggedIn: (state) => Boolean(state.userData?.email),
-    getUserName: (state) => state.userData?.name,
+    getUser: (state) => state.userData,
   },
 
   actions: {
