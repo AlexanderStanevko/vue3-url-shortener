@@ -27,9 +27,15 @@
             class="shorten-button"
           />
         </div>
-        <div v-if="shortenedUrl" class="shortened-url q-mt-md">
-          Shortened URL:
-          <a :href="shortenedUrl" target="_blank">{{ shortenedUrl }}</a>
+        <div class="link-list">
+          <LinkDisplayCard
+            v-for="link in links"
+            :id="link.id"
+            :key="link.shortLink"
+            :short-link="link.shortLink"
+            :long-link="link.longLink"
+            @delete="onDeleteLink"
+          />
         </div>
       </q-form>
     </div>
@@ -41,11 +47,14 @@ import { defineComponent, ref } from 'vue';
 import { useUserStore } from 'stores/UserStore';
 import { notificationSuccess } from 'utils/notifications';
 import { urlFieldRules } from 'utils/rules';
+import LinkDisplayCard from 'components/LinkDisplayCard.vue';
 import responsive from '../utils/responsive';
 
 export default defineComponent({
   name: 'LinksPage',
-  components: {},
+  components: {
+    LinkDisplayCard,
+  },
   setup() {
     const userStore = useUserStore();
     const userName = ref(userStore.userData?.name);
@@ -56,13 +65,34 @@ export default defineComponent({
     const domains = ['http://short.est', 'http://short.ly'];
     const selectedDomain = ref(domains[0]);
 
+    const links = ref([
+      {
+        id: 1,
+        shortLink: 'http://short.est/abc123',
+        longLink:
+          'http://example.com/very/long/link/that/needs/to/be/shortened',
+      },
+    ]);
+    const onDeleteLink = (id: number) => {
+      links.value = links.value.filter((item) => item.id !== id);
+    };
+
     const onSubmit = () => {
-      shortenedUrl.value = `http://short.est/${Math.random()
+      const newShortLink = `http://short.est/${Math.random()
         .toString(36)
         .substr(2, 5)}`;
+
+      const newLinkObject = {
+        id: new Date().getTime(),
+        shortLink: newShortLink,
+        longLink: url.value,
+      };
+      links.value.push(newLinkObject);
       notificationSuccess({
         message: 'The URL was successfully shortened',
       });
+
+      url.value = '';
     };
 
     return {
@@ -74,6 +104,8 @@ export default defineComponent({
       onSubmit,
       shortenedUrl,
       urlFieldRules,
+      links,
+      onDeleteLink,
     };
   },
 });
