@@ -1,11 +1,11 @@
-import { Nullable } from 'utils/nullable';
-
-export type UserData = {
-  name: string;
-  email: string;
-  password: string;
-};
+// import { Nullable } from 'utils/nullable';
 
 export type User = {
-  userData: Nullable<UserData>;
+  fullName: string;
+  email: string;
+  password?: string;
 };
+
+// export type User = {
+//   userData: Nullable<UserData>;
+// };
