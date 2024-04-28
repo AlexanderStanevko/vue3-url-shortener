@@ -14,7 +14,7 @@
     <div class="clicks-info row col-12 col-md-4 justify-start">
       <div>
         <q-icon name="touch_app" class="clicks-icon" />
-        <span>0 click</span>
+        <span>{{ urlData?.clicks }} clicks</span>
       </div>
       <div class="owner">
         {{ name }}

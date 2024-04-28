@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useUrlShortenerStore } from 'stores/UrlShortenerStore';
 import { useUserStore } from 'stores/UserStore';
 import { notificationSuccess } from 'utils/notifications';
@@ -69,14 +69,16 @@ export default defineComponent({
     const domains = ['http://short.est', 'http://short.ly'];
     const selectedDomain = ref(domains[0]);
 
-    // const links = ref([
-    //   {
-    //     id: 1,
-    //     shortLink: 'http://short.est/abc123',
-    //     longLink:
-    //       'http://example.com/very/long/link/that/needs/to/be/shortened',
-    //   },
-    // ]);
+    const onGetAll = async () => {
+      try {
+        isLoading.value = true;
+        await urlStore.getAll();
+      } catch (error) {
+        console.error(error);
+      } finally {
+        isLoading.value = false;
+      }
+    };
 
     const onCreate = async () => {
       debugger;
@@ -108,6 +110,10 @@ export default defineComponent({
         });
       }
     };
+
+    onMounted(async () => {
+      await onGetAll();
+    });
 
     return {
       ...responsive,

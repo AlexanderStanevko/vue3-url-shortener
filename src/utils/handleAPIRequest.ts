@@ -32,6 +32,7 @@ export const handleAPIRequest = async <
 }: HandleAPIRequestArgs<RequestBodyType>): Promise<
   Nullable<ExtendedResponse<ResponseType>>
 > => {
+  debugger;
   try {
     const url = controller ? `${controller}/${method}` : method;
 

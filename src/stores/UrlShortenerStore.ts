@@ -23,7 +23,6 @@ export const useUrlShortenerStore = defineStore({
 
   actions: {
     async createShortUrl(request: CreateShortUrlRequest) {
-      debugger;
       const res = await handleAPIRequest<
         CreateShortUrlResponse,
         CreateShortUrlRequest
@@ -38,6 +37,18 @@ export const useUrlShortenerStore = defineStore({
       }
 
       return res;
+    },
+
+    async getAll() {
+      const res = await handleAPIRequest<UrlData[], unknown>({
+        controller: 'short',
+        method: 'all',
+        httpMethod: 'get',
+      });
+
+      if (res?.length) {
+        this.urlList = res;
+      }
     },
   },
 });
