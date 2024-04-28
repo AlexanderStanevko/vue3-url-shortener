@@ -2,7 +2,7 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title>
+        <q-toolbar-title class="cursor-pointer" @click="goHome">
           <q-icon name="public" style="font-size: 40px" />
           Url Shortener
         </q-toolbar-title>
@@ -16,13 +16,22 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   name: 'BaseLayout',
-  setup() {},
+  setup() {
+    const router = useRouter();
+
+    const goHome = () => {
+      router.push('/');
+    };
+
+    return {
+      goHome,
+    };
+  },
 });
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

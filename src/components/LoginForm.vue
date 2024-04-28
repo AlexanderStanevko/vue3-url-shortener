@@ -77,20 +77,35 @@ export default defineComponent({
     const email = ref('');
     const password = ref('');
     const showPassword = ref(false);
+    const isLoading = ref(false);
 
     const togglePasswordVisibility = () => {
       showPassword.value = !showPassword.value;
     };
 
-    const userIdentification = () => {
-      return (
-        userStore.getUser?.email === email.value &&
-        userStore.getUser.password === password.value
-      );
+    const onLogin = async () => {
+      if (!email.value || !password.value) return;
+
+      try {
+        isLoading.value = true;
+
+        const res = await userStore.login({
+          email: email.value,
+          password: password.value,
+        });
+
+        return res;
+
+      } catch (error) {
+        console.error(error);
+      } finally {
+        isLoading.value = false;
+      }
     };
 
-    const onSubmit = () => {
-      if (userIdentification()) {
+    const onSubmit = async () => {
+      const res = await onLogin()
+      if (res?.success) {
         notificationSuccess({
           message: 'You have successfully logged in',
         });

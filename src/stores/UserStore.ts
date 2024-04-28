@@ -44,6 +44,8 @@ export const useUserStore = defineStore({
       if (res?.token) {
         SessionStorage.set(JWT_STORAGE_KEY, res.token);
       }
+
+      return res;
     },
     logout() {
       this.token = '';

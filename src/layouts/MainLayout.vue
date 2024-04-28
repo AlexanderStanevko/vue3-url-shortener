@@ -2,7 +2,10 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-toolbar-title>
+        <q-toolbar-title
+          class="cursor-pointer"
+          @click="goHome"
+        >
           <q-icon
             name="public"
             style="font-size: 40px"
@@ -84,11 +87,15 @@ export default defineComponent({
 
     const mainLabel = computed(() => (isDesktop.value ? 'Url Shortener' : ''));
 
-    const accountLabel = computed(
-      () => isDesktop.value ? userStore.getUser?.name : ''
-    )
+    const accountLabel = computed(() =>
+      isDesktop.value ? userStore.getUser?.fullName : ''
+    );
     const goToSettings = () => {
       router.push('/settings');
+    };
+
+    const goHome = () => {
+      router.push('/');
     };
 
     const onLogout = () => {
@@ -101,12 +108,13 @@ export default defineComponent({
 
     return {
       ...responsive,
-      goToSettings,
-      onLogout,
-      toggleMenu,
       menuOpen,
       mainLabel,
       accountLabel,
+      goToSettings,
+      onLogout,
+      toggleMenu,
+      goHome,
     };
   },
 });
