@@ -22,7 +22,7 @@ export const handleAPIRequest = async <
   ResponseType,
   RequestBodyType = undefined
 >({
-  controller = 'pipe/v1/general',
+  controller = 'short',
   method,
   httpMethod = 'post',
   body = null,

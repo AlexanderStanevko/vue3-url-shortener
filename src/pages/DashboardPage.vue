@@ -67,7 +67,7 @@ export default defineComponent({
   },
   setup() {
     const userStore = useUserStore();
-    const userName = computed(() => userStore.userData?.name);
+    const userName = computed(() => userStore.user?.fullName);
 
     const links = ref([
       { id: 1, url: 'http://example.com/1' },

@@ -19,7 +19,7 @@ const namespace = {
 }
 
 const apiURL = {
-  dev: '',
+  dev: 'http://localhost:3000/',
   test: '',
   prod: '',
 };
@@ -181,7 +181,7 @@ module.exports = configure((ctx) => {
     // manualStoreHydration: true,
     // manualPostHydrationTrigger: true,
 
-    prodPort: 3000, // The default port that the production server should use
+    prodPort: 9000, // The default port that the production server should use
     // (gets superseded if process.env.PORT is specified at runtime)
 
     middlewares: [
