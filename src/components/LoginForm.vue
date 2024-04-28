@@ -39,6 +39,7 @@
                 label="Log In"
                 type="submit"
                 color="primary"
+                :loading="isLoading"
                 class="full-width"
               />
             </div>
@@ -130,6 +131,7 @@ export default defineComponent({
       togglePasswordVisibility,
       goToRegister,
       emailFieldRules,
+      isLoading,
       passwordFieldRules,
     };
   },

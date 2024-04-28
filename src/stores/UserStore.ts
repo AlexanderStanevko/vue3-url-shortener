@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { JWT_STORAGE_KEY } from 'utils/global';
+import { JWT_STORAGE_KEY, USER_DATA } from 'utils/global';
 import { handleAPIRequest } from 'utils/handleAPIRequest';
 import { Nullable } from 'utils/nullable';
 import { SessionStorage } from 'utils/storage';
@@ -19,8 +19,8 @@ export const useUserStore = defineStore({
 
   state: () =>
     ({
-      user: null,
-      token: '',
+      user: SessionStorage.get(USER_DATA, true) || null,
+      token: SessionStorage.get(JWT_STORAGE_KEY),
       isLoading: false,
     } as UserState),
 
@@ -43,6 +43,10 @@ export const useUserStore = defineStore({
 
       if (res?.token) {
         SessionStorage.set(JWT_STORAGE_KEY, res.token);
+        SessionStorage.set(USER_DATA, res.user, true);
+
+        this.user = res.user;
+        this.token = res.token;
       }
 
       return res;
