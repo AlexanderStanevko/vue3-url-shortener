@@ -3,8 +3,8 @@ import { JWT_STORAGE_KEY, USER_DATA } from 'utils/global';
 import { handleAPIRequest } from 'utils/handleAPIRequest';
 import { Nullable } from 'utils/nullable';
 import { SessionStorage } from 'utils/storage';
-import { UserLoginRequest } from 'types/request';
-import { UserLoginResponse } from 'types/response';
+import { UserLoginRequest, UserRegisterRequest } from 'types/request';
+import { UserAuthResponse } from 'types/response';
 
 import { User } from 'types';
 
@@ -35,7 +35,7 @@ export const useUserStore = defineStore({
     },
 
     async login(request: UserLoginRequest) {
-      const res = await handleAPIRequest<UserLoginResponse, UserLoginRequest>({
+      const res = await handleAPIRequest<UserAuthResponse, UserLoginRequest>({
         controller: 'auth',
         method: 'login',
         body: { ...request },
@@ -51,10 +51,33 @@ export const useUserStore = defineStore({
 
       return res;
     },
+
+    async register(request: UserRegisterRequest) {
+      const res = await handleAPIRequest<UserAuthResponse, UserRegisterRequest>(
+        {
+          controller: 'auth',
+          method: 'register',
+          body: { ...request },
+        }
+      );
+
+      if (res?.token) {
+        SessionStorage.set(JWT_STORAGE_KEY, res.token);
+        SessionStorage.set(USER_DATA, res.user, true);
+
+        this.user = res.user;
+        this.token = res.token;
+      }
+
+      return res;
+    },
+
     logout() {
       this.token = '';
       this.user = null;
       this.isLoading = false;
+      SessionStorage.remove(JWT_STORAGE_KEY);
+      SessionStorage.remove(USER_DATA);
     },
   },
 });

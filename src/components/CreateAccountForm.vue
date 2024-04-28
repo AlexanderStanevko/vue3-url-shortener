@@ -67,6 +67,8 @@
                 type="submit"
                 color="primary"
                 class="full-width"
+                :loading="isLoading"
+                :disable="isLoading"
               />
             </div>
           </div>
@@ -87,7 +89,7 @@
 import { ref, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from 'stores/UserStore';
-import { notificationSuccess } from 'utils/notifications';
+import { notificationSuccess, errorAlert } from 'utils/notifications';
 import { emailFieldRules, passwordFieldRules } from 'utils/rules';
 import AppCard from 'components/App/AppCard.vue';
 import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
@@ -107,6 +109,7 @@ export default defineComponent({
     const password = ref('');
     const passwordConfirm = ref('');
     const showPassword = ref(false);
+    const isLoading = ref(false);
 
     const togglePasswordVisibility = () => {
       showPassword.value = !showPassword.value;
@@ -120,20 +123,39 @@ export default defineComponent({
       showPassword.value = false;
     };
 
-    const onSubmit = () => {
-      userStore.createUser({
-        name: name.value,
-        email: email.value,
-        password: password.value,
-      });
+    const onRegisterUser = async () => {
+      if (!email.value || !password.value) return;
 
-      notificationSuccess({
-        message: 'Your account has been successfully created',
-      });
+      try {
+        isLoading.value = true;
 
-      router.push({
-        name: 'Dashboard',
-      });
+        const res = await userStore.register({
+          fullName: name.value,
+          email: email.value,
+          password: password.value,
+        });
+
+        return res;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    const onSubmit = async () => {
+      const res = await onRegisterUser();
+      if (res?.success) {
+        notificationSuccess({
+          message: 'Your account has been successfully created',
+        });
+      } else {
+        errorAlert({
+          message: 'Smth went Wrong',
+        });
+        return;
+      }
+      router.push({ name: 'Dashboard' });
     };
 
     const goToLogin = () => {
@@ -154,6 +176,7 @@ export default defineComponent({
       emailFieldRules,
       passwordFieldRules,
       goToLogin,
+      isLoading,
     };
   },
 });

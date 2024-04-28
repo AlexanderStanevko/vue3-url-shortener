@@ -41,6 +41,7 @@
                 color="primary"
                 :loading="isLoading"
                 class="full-width"
+                :disable="isLoading"
               />
             </div>
           </div>

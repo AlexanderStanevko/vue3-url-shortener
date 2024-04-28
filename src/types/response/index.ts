@@ -1,1 +1,1 @@
-export * from './UserLoginResponse';
+export * from './UserAuthResponse';
