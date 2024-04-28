@@ -25,15 +25,16 @@
             type="submit"
             color="primary"
             class="shorten-button"
+            :loading="isLoading"
+            :disable="isLoading"
           />
         </div>
         <div class="link-list q-mt-xl">
           <LinkDisplayCard
-            v-for="link in links"
+            v-for="link in urlList"
             :id="link.id"
-            :key="link.shortLink"
-            :short-link="link.shortLink"
-            :long-link="link.longLink"
+            :key="link.shortenedUrl"
+            :url-data="link"
             @delete="onDeleteLink"
           />
         </div>
@@ -43,7 +44,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
+import { useUrlShortenerStore } from 'stores/UrlShortenerStore';
 import { useUserStore } from 'stores/UserStore';
 import { notificationSuccess } from 'utils/notifications';
 import { urlFieldRules } from 'utils/rules';
@@ -57,40 +59,54 @@ export default defineComponent({
   },
   setup() {
     const userStore = useUserStore();
-    const userName = ref(userStore.userData?.name);
-
+    const urlStore = useUrlShortenerStore();
+    const userName = ref(userStore.getUser?.fullName);
     const url = ref('');
-    const shortenedUrl = ref('');
+    const isLoading = ref(false);
+
+    const urlList = computed(() => urlStore.getAllUrls);
 
     const domains = ['http://short.est', 'http://short.ly'];
     const selectedDomain = ref(domains[0]);
 
-    const links = ref([
-      {
-        id: 1,
-        shortLink: 'http://short.est/abc123',
-        longLink:
-          'http://example.com/very/long/link/that/needs/to/be/shortened',
-      },
-    ]);
-    const onDeleteLink = (id: number) => {
-      links.value = links.value.filter((item) => item.id !== id);
+    // const links = ref([
+    //   {
+    //     id: 1,
+    //     shortLink: 'http://short.est/abc123',
+    //     longLink:
+    //       'http://example.com/very/long/link/that/needs/to/be/shortened',
+    //   },
+    // ]);
+
+    const onCreate = async () => {
+      debugger;
+      if (!url.value) return;
+
+      try {
+        isLoading.value = true;
+
+        const res = await urlStore.createShortUrl({
+          originalUrl: url.value,
+        });
+
+        return res;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        isLoading.value = false;
+      }
     };
 
-    const onSubmit = () => {
-      const newShortLink = `${selectedDomain.value}/${Math.random()
-        .toString(36)
-        .substr(2, 5)}`;
+    const onDeleteLink = (id: number) => {};
 
-      const newLinkObject = {
-        id: new Date().getTime(),
-        shortLink: newShortLink,
-        longLink: url.value,
-      };
-      links.value.push(newLinkObject);
-      notificationSuccess({
-        message: 'The URL was successfully shortened',
-      });
+    const onSubmit = async () => {
+      debugger;
+      const res = await onCreate();
+      if (res) {
+        notificationSuccess({
+          message: 'The URL was successfully shortened',
+        });
+      }
     };
 
     return {
@@ -100,10 +116,10 @@ export default defineComponent({
       url,
       domains,
       onSubmit,
-      shortenedUrl,
       urlFieldRules,
-      links,
       onDeleteLink,
+      urlList,
+      isLoading,
     };
   },
 });

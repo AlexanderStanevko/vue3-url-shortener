@@ -5,10 +5,10 @@
     <div class="q-gutter-sm col-12 col-md-7">
       <div class="q-mb-xs cursor-pointer" @click="copyLink">
         <q-icon name="content_copy" class="link-icon" />
-        <span class="short-link">{{ shortLink }}</span>
+        <span class="short-link">{{ urlData?.shortenedUrl }}</span>
       </div>
       <div class="full-link q-mb-xs">
-        {{ longLink }}
+        {{ urlData?.originalUrl }}
       </div>
     </div>
     <div class="clicks-info row col-12 col-md-4 justify-start">
@@ -28,31 +28,25 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, PropType } from 'vue';
+import { useUserStore } from 'stores/UserStore';
 import { notificationSuccess } from 'utils/notifications';
-import { useUserStore } from '../stores/UserStore';
+import { Nullable } from 'utils/nullable';
+import { UrlData } from 'types';
 
 export default defineComponent({
   name: 'LinkDisplayCard',
   props: {
-    id: {
-      type: Number,
-      required: true,
-    },
-    shortLink: {
-      type: String,
-      required: true,
-    },
-    longLink: {
-      type: String,
-      required: true,
+    urlData: {
+      type: Object as PropType<Nullable<UrlData>>,
+      default: () => {},
     },
   },
   emits: ['delete'],
   setup(props, { emit }) {
     const userStore = useUserStore();
 
-    const name = computed(() => userStore.getUser?.name);
+    const name = computed(() => userStore.getUser?.fullName);
 
     const formattedDate = computed(() => {
       const options = {
@@ -64,12 +58,14 @@ export default defineComponent({
         second: '2-digit',
         hour12: false,
       };
-      return new Intl.DateTimeFormat('ru-RU', options).format(new Date());
+      return new Intl.DateTimeFormat('ru-RU', options).format(
+        new Date(props.urlData?.createdAt as Date)
+      );
     });
 
     const copyLink = () => {
       navigator.clipboard
-        .writeText(props.shortLink)
+        .writeText(props.urlData?.shortenedUrl as string)
         .then(() => {
           notificationSuccess({
             message: 'Successfully copied to clipboard',
@@ -79,7 +75,7 @@ export default defineComponent({
     };
 
     const emitDelete = () => {
-      emit('delete', props.id);
+      emit('delete', props.urlData?.id);
     };
 
     return {
