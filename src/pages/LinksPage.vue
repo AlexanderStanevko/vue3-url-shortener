@@ -35,6 +35,7 @@
             :id="link.id"
             :key="link.shortenedUrl"
             :url-data="link"
+            :is-loading="isDeletingUrl"
             @delete="onDeleteLink"
           />
         </div>
@@ -63,6 +64,7 @@ export default defineComponent({
     const userName = ref(userStore.getUser?.fullName);
     const url = ref('');
     const isLoading = ref(false);
+    const isDeletingUrl = ref(false);
 
     const urlList = computed(() => urlStore.getAllUrls);
 
@@ -99,7 +101,27 @@ export default defineComponent({
       }
     };
 
-    const onDeleteLink = (id: number) => {};
+    const onDeleteLink = async (id: number) => {
+      if (!id && id !== 0) return;
+
+      try {
+        isDeletingUrl.value = true;
+
+        const res = await urlStore.deleteShortUrl(id);
+
+        if (res?.success) {
+          notificationSuccess({
+            message: res.message,
+          });
+        }
+
+        return res;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        isDeletingUrl.value = false;
+      }
+    };
 
     const onSubmit = async () => {
       debugger;
@@ -126,6 +148,7 @@ export default defineComponent({
       onDeleteLink,
       urlList,
       isLoading,
+      isDeletingUrl,
     };
   },
 });

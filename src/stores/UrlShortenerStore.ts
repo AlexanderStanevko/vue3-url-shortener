@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { handleAPIRequest } from 'utils/handleAPIRequest';
 // import { Nullable } from 'utils/nullable';
 import { CreateShortUrlRequest } from 'types/request';
-import { CreateShortUrlResponse } from 'types/response';
+import { CreateShortUrlResponse, DeleteShortUrlResponse } from 'types/response';
 import { UrlData } from 'types';
 
 type UrlShortenerState = {
@@ -33,7 +33,7 @@ export const useUrlShortenerStore = defineStore({
       });
 
       if (res?.urlData) {
-        this.urlList.push(res.urlData);
+        this.urlList.unshift(res.urlData);
       }
 
       return res;
@@ -49,6 +49,21 @@ export const useUrlShortenerStore = defineStore({
       if (res?.length) {
         this.urlList = res;
       }
+    },
+
+    async deleteShortUrl(id: number) {
+      const res = await handleAPIRequest<DeleteShortUrlResponse, unknown>({
+        controller: 'short',
+        httpMethod: 'delete',
+        params: {
+          id,
+        },
+      });
+      if (res?.success) {
+        this.urlList = this.urlList.filter((url) => url.id !== id);
+      }
+
+      return res;
     },
   },
 });

@@ -23,7 +23,13 @@
         {{ formattedDate }}
       </div>
     </div>
-    <q-icon name="delete" class="delete-icon" @click="emitDelete" />
+    <q-icon
+      name="delete"
+      :loading="isLoading"
+      :disable="isLoading"
+      class="delete-icon"
+      @click="emitDelete"
+    />
   </div>
 </template>
 
@@ -40,6 +46,10 @@ export default defineComponent({
     urlData: {
       type: Object as PropType<Nullable<UrlData>>,
       default: () => {},
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
     },
   },
   emits: ['delete'],
