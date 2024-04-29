@@ -30,14 +30,16 @@
           />
         </div>
         <div class="link-list q-mt-xl">
-          <LinkDisplayCard
-            v-for="link in urlList"
-            :id="link.id"
-            :key="link.shortenedUrl"
-            :url-data="link"
-            :is-loading="isDeletingUrl"
-            @delete="onDeleteLink"
-          />
+          <transition-group name="list" tag="div" appear>
+            <LinkDisplayCard
+              v-for="link in urlList"
+              :id="link.id"
+              :key="link.id"
+              :url-data="link"
+              :is-loading="isDeletingUrl"
+              @delete="onDeleteLink"
+            />
+          </transition-group>
         </div>
       </q-form>
     </div>
@@ -155,6 +157,16 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+.list-enter-active,
+.list-leave-active {
+  transition: opacity 0.5s, transform 0.5s;
+}
+.list-enter,
+.list-leave-to {
+  transform: translateY(20px);
+  opacity: 0;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
