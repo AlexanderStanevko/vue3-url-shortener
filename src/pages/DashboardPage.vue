@@ -1,40 +1,37 @@
-<template>
+<!-- <template>
   <q-page class="dashboard-page">
-    <div class="animated-welcome text-center">
-      Dashboard Page
-    </div>
+    <div class="animated-welcome text-center">Dashboard Page</div>
     <div class="card-container">
-      <!-- Total Visits Card -->
       <AppCard class="dashboard-card">
         <template #header>
           <h4 class="h4 text-dark text-center">Total Visits</h4>
         </template>
         <template #default>
           <div class="text-dark text-center statistic-value">
-            <h2>220</h2>
+            <h2>{{ totalClicks }}</h2>
           </div>
         </template>
       </AppCard>
-
-      <!-- Unique Visits Card -->
       <AppCard class="dashboard-card">
         <template #header>
           <h4 class="h4 text-dark text-center">Unique Visits</h4>
         </template>
         <template #default>
           <div class="text-dark text-center statistic-value">
-            <h2>22</h2>
+            <h2>{{ uniqueClicks }}</h2>
           </div>
         </template>
       </AppCard>
     </div>
 
-    <!-- Most Active Links -->
     <div class="most-active-links bg-primary text-white q-pa-md q-mb-md">
       <h4 class="h4 text-center q-mb-md">Most Active Links</h4>
       <div class="links-content bg-grey-1 text-dark q-pa-md">
-        <!-- <q-separator color="orange" /> -->
-        <div v-for="(link, index) in links" :key="link.id" class="q-mb-md">
+        <div
+          v-for="(link, index) in mostActiveLinks"
+          :key="link.shortenedUrl"
+          class="q-mb-md"
+        >
           <div class="col q-gutter-sm">
             <div class="row justify-start items-center">
               <q-btn
@@ -42,21 +39,78 @@
                 round
                 icon="content_copy"
                 class="copy-button"
-                @click="copyLink(link.url)"
+                @click="copyLink(link.shortenedUrl)"
               />
-              <span class="link-url">{{ link.url }}</span>
+              <span class="link-url">{{ link.shortenedUrl }}</span>
             </div>
           </div>
-          <q-separator v-if="index < links.length - 1" />
+          <q-separator v-if="index < mostActiveLinks.length - 1" />
         </div>
+      </div>
+    </div>
+  </q-page>
+</template> -->
+
+<template>
+  <q-page class="dashboard-page">
+    <div class="animated-welcome text-center">Dashboard Page</div>
+    <div class="card-container">
+      <AppCard class="dashboard-card">
+        <template #header>
+          <h4 class="h4 text-dark text-center">Total Visits</h4>
+        </template>
+        <template #default>
+          <div class="text-dark text-center statistic-value">
+            <h2>{{ totalClicks }}</h2>
+          </div>
+        </template>
+      </AppCard>
+      <AppCard class="dashboard-card">
+        <template #header>
+          <h4 class="h4 text-dark text-center">Unique Visits</h4>
+        </template>
+        <template #default>
+          <div class="text-dark text-center statistic-value">
+            <h2>{{ uniqueClicks }}</h2>
+          </div>
+        </template>
+      </AppCard>
+    </div>
+    <div class="most-active-links bg-primary text-white q-pa-md q-mb-md">
+      <h4 class="h4 text-center q-mb-md">Most Active Links</h4>
+      <div
+        v-if="mostActiveLinks.length > 0"
+        class="links-content bg-grey-1 text-dark q-pa-md"
+      >
+        <div
+          v-for="(link, index) in mostActiveLinks"
+          :key="link.shortenedUrl"
+          class="q-mb-md"
+        >
+          <div class="row justify-start items-center">
+            <q-btn
+              flat
+              round
+              icon="content_copy"
+              class="copy-button"
+              @click="copyLink(link.shortenedUrl)"
+            />
+            <span class="link-url ellipsis">{{ link.shortenedUrl }}</span>
+          </div>
+          <q-separator v-if="index < mostActiveLinks.length - 1" />
+        </div>
+      </div>
+      <div v-else class="empty-state text-center">
+        <q-icon name="link_off" size="52px" class="q-my-md" />
+        <div>No active links to display. Please check back later!</div>
       </div>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from 'vue';
-import { useUserStore } from 'stores/UserStore';
+import { defineComponent, computed, onMounted } from 'vue';
+import { useUrlShortenerStore } from 'stores/UrlShortenerStore';
 import { notificationSuccess } from 'utils/notifications';
 import AppCard from 'components/App/AppCard.vue';
 
@@ -66,36 +120,33 @@ export default defineComponent({
     AppCard,
   },
   setup() {
-    const userStore = useUserStore();
-    const userName = computed(() => userStore.user?.fullName);
+    const urlStore = useUrlShortenerStore();
 
-    const links = ref([
-      { id: 1, url: 'http://example.com/1' },
-      { id: 2, url: 'http://example.com/2' },
-      { id: 3, url: 'http://example.com/3' },
-      { id: 4, url: 'http://example.com/4' },
-      { id: 5, url: 'http://example.com/5' },
-      { id: 6, url: 'http://example.com/6' },
-    ]);
+    onMounted(async () => {
+      await urlStore.getMostActive();
+    });
+
+    const mostActiveLinks = computed(() => urlStore.getMostActiveLinks);
+    const totalClicks = computed(() => urlStore.getTotalClicks);
+    const uniqueClicks = computed(() => urlStore.getUniqueClicks);
 
     const copyLink = (url: string) => {
-      if (navigator.clipboard) {
-        navigator.clipboard
-          .writeText(url)
-          .then(() => {
-            notificationSuccess({
-              message: 'Successfully copied to clipboard',
-            });
-          })
-          .catch((err) => {
-            console.error('Could not copy text: ', err);
+      navigator.clipboard
+        .writeText(url)
+        .then(() => {
+          notificationSuccess({
+            message: 'Successfully copied to clipboard',
           });
-      }
+        })
+        .catch((err) => {
+          console.error('Could not copy text: ', err);
+        });
     };
 
     return {
-      userName,
-      links,
+      mostActiveLinks,
+      totalClicks,
+      uniqueClicks,
       copyLink,
     };
   },
@@ -112,7 +163,7 @@ export default defineComponent({
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; 
+  justify-content: space-between;
   max-width: 800px;
   width: 100%;
   margin-bottom: 20px;
@@ -124,17 +175,8 @@ export default defineComponent({
   font-weight: bold;
 }
 
-@media (max-width: 600px) {
-  .statistic-value h2 {
-    font-size: 28px;
-  }
-}
-
 .dashboard-card {
-  flex-basis: calc(
-    50% - 10px
-  );
-
+  flex-basis: calc(50% - 10px);
   @media (max-width: 600px) {
     flex-basis: 100%;
   }
@@ -146,16 +188,21 @@ export default defineComponent({
 
 .link-url {
   font-size: 1.25rem;
-  word-break: break-all; 
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 70%;
 }
 
 .most-active-links {
   width: 100%;
   min-height: 150px;
-  border-radius: 4px; 
+  border-radius: 4px;
 
   .links-content {
-    min-height: 100px; 
+    min-height: 100px;
     border-radius: 4px;
   }
 }
@@ -177,8 +224,5 @@ export default defineComponent({
   font-weight: bold;
   color: #1976d2;
 }
-
-.animated-welcome span {
-  color: #d32f2f;
-}
 </style>
+

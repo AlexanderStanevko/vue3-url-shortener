@@ -3,7 +3,10 @@
     class="link-display-card q-pa-md row justify-between items-center full-width"
   >
     <div class="q-gutter-sm col-12 col-md-7">
-      <div class="q-mb-xs cursor-pointer row">
+      <div
+        class="q-mb-xs cursor-pointer row"
+        :class="[{ 'no-wrap': isMobile }]"
+      >
         <q-icon
           name="content_copy"
           size="2rem"
@@ -24,7 +27,7 @@
     <div class="clicks-info row col-12 col-md-4 justify-start">
       <div>
         <q-icon name="touch_app" size="1.5rem" class="clicks-icon" />
-        <span>{{ data?.clicks }} clicks</span>
+        <span class="text-bold q-mr-md">{{ data?.clicks }} clicks </span>
       </div>
       <div class="date">
         {{ formattedDate }}
@@ -48,6 +51,7 @@ import { computed, defineComponent, PropType } from 'vue';
 import { useUserStore } from 'stores/UserStore';
 import { notificationSuccess } from 'utils/notifications';
 import { Nullable } from 'utils/nullable';
+import responsive from 'utils/responsive';
 import { UrlData } from 'types';
 
 export default defineComponent({
@@ -105,6 +109,7 @@ export default defineComponent({
     };
 
     return {
+      ...responsive,
       name,
       copyLink,
       emitDelete,

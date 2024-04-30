@@ -2,11 +2,18 @@ import { defineStore } from 'pinia';
 import { handleAPIRequest } from 'utils/handleAPIRequest';
 // import { Nullable } from 'utils/nullable';
 import { CreateShortUrlRequest } from 'types/request';
-import { CreateShortUrlResponse, DeleteShortUrlResponse } from 'types/response';
+import {
+  CreateShortUrlResponse,
+  DeleteShortUrlResponse,
+  GetMostActiveResponse,
+} from 'types/response';
 import { UrlData } from 'types';
 
 type UrlShortenerState = {
   urlList: UrlData[];
+  mostActiveLinks: GetMostActiveResponse['mostActiveUrls'];
+  totalClicks: GetMostActiveResponse['totalClicks'];
+  uniqueClicks: GetMostActiveResponse['uniqueClicks'];
 };
 
 export const useUrlShortenerStore = defineStore({
@@ -15,10 +22,16 @@ export const useUrlShortenerStore = defineStore({
   state: () =>
     ({
       urlList: [],
+      mostActiveLinks: [],
+      totalClicks: 0,
+      uniqueClicks: 0,
     } as UrlShortenerState),
 
   getters: {
     getAllUrls: (state) => state.urlList,
+    getMostActiveLinks: (state) => state.mostActiveLinks,
+    getTotalClicks: (state) => state.totalClicks,
+    getUniqueClicks: (state) => state.uniqueClicks,
   },
 
   actions: {
@@ -51,6 +64,20 @@ export const useUrlShortenerStore = defineStore({
       }
     },
 
+    async getMostActive() {
+      const res = await handleAPIRequest<GetMostActiveResponse, unknown>({
+        controller: 'short',
+        method: 'mostActive',
+        httpMethod: 'get',
+      });
+
+      if (res) {
+        this.mostActiveLinks = res.mostActiveUrls;
+        this.uniqueClicks = res.uniqueClicks;
+        this.totalClicks = res.totalClicks;
+      }
+    },
+
     async deleteShortUrl(id: number) {
       const res = await handleAPIRequest<DeleteShortUrlResponse, unknown>({
         controller: 'short',
@@ -72,6 +99,6 @@ export const useUrlShortenerStore = defineStore({
         httpMethod: 'get',
         pathParam: shortenedCode,
       });
-    }
+    },
   },
 });
