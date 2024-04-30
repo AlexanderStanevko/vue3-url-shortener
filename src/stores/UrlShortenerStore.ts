@@ -65,5 +65,13 @@ export const useUrlShortenerStore = defineStore({
 
       return res;
     },
+
+    async redirectToOriginalUrl(shortenedCode: string) {
+      await handleAPIRequest<unknown, unknown>({
+        controller: 'short',
+        httpMethod: 'get',
+        pathParam: shortenedCode,
+      });
+    }
   },
 });

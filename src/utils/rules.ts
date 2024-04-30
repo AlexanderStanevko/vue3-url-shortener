@@ -1,3 +1,5 @@
+import validator from 'validator';
+
 export const isValidEmail = (email: string) => {
   const emailPattern =
     /^(?=[a-zA-Z0-9@._%+-]{6,254}$)[a-zA-Z0-9._%+-]{1,64}@(?:[a-zA-Z0-9-]{1,63}\.){1,8}[a-zA-Z]{2,63}$/;
@@ -10,18 +12,11 @@ export const emailFieldRules = [
   (val: string) => isValidEmail(val) || 'Please enter a valid email!',
 ];
 
-export const isValidUrl = (url: string): string | true => {
-  const urlPattern = new RegExp(
-    '^(https?:\\/\\/)?' +
-      '((([a-zA-Z\\d]([a-zA-Z\\d-]*[a-zA-Z\\d])*)\\.)+[a-zA-Z]{2,}|' +
-      '((\\d{1,3}\\.){3}\\d{1,3}))' +
-      '(\\:\\d+)?' +
-      '(\\/[-a-zA-Z\\d%_.~+]*)*' +
-      '(\\?[;&a-zA-Z\\d%_.~+=-]*)?' +
-      '(\\#[-a-zA-Z\\d_]*)?$',
-    'i'
-  );
-  return urlPattern.test(url) || 'Please enter a valid URL!';
+export const isValidUrl = (url: string): boolean => {
+  return validator.isURL(url, {
+    require_protocol: true,
+    allow_underscores: true,
+  });
 };
 
 export const urlFieldRules = [
@@ -40,10 +35,13 @@ export const phoneFieldRules = [
 ];
 
 export const isValidPassword = (password: string): string | true => {
-  const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-  return passwordPattern.test(password) || 'Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character!';
+  const passwordPattern =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+  return (
+    passwordPattern.test(password) ||
+    'Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character!'
+  );
 };
-
 
 export const passwordFieldRules = [
   (val: string) => (val && val.length) || 'Field is required!',

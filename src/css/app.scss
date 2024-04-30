@@ -29,3 +29,17 @@ input[type=number] {
     gap: 50px;
   }
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+@-moz-document url-prefix() {
+  html {
+    scrollbar-width: none;
+  }
+}
+
+body {
+  -ms-overflow-style: none;
+}

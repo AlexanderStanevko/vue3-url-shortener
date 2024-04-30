@@ -40,6 +40,10 @@
               @delete="onDeleteLink"
             />
           </transition-group>
+          <div v-if="urlList.length === 0" class="empty-state text-center">
+            <q-icon name="link_off" size="52px" class="q-my-md" />
+            <div>No links to display. Start by creating one!</div>
+          </div>
         </div>
       </q-form>
     </div>
@@ -233,5 +237,19 @@ export default defineComponent({
 .shortened-url a {
   color: #1976d2;
   text-decoration: none;
+}
+
+.empty-state {
+  color: #606060;
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+
+  .q-icon {
+    color: #1976d2;
+  }
 }
 </style>

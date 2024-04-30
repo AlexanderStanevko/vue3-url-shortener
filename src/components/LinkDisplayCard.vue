@@ -3,33 +3,43 @@
     class="link-display-card q-pa-md row justify-between items-center full-width"
   >
     <div class="q-gutter-sm col-12 col-md-7">
-      <div class="q-mb-xs cursor-pointer" @click="copyLink">
-        <q-icon name="content_copy" class="link-icon" />
-        <span class="short-link">{{ urlData?.shortenedUrl }}</span>
+      <div class="q-mb-xs cursor-pointer row">
+        <q-icon
+          name="content_copy"
+          size="2rem"
+          class="link-icon"
+          @click="copyLink"
+        />
+        <div
+          class="short-link q-mb-xs cursor-pointer"
+          @click="onRedirect(data?.shortenedUrl || '')"
+        >
+          {{ data?.shortenedUrl }}
+        </div>
       </div>
       <div class="full-link q-mb-xs">
-        {{ urlData?.originalUrl }}
+        {{ data?.originalUrl }}
       </div>
     </div>
     <div class="clicks-info row col-12 col-md-4 justify-start">
       <div>
-        <q-icon name="touch_app" class="clicks-icon" />
-        <span>{{ urlData?.clicks }} clicks</span>
-      </div>
-      <div class="owner">
-        {{ name }}
+        <q-icon name="touch_app" size="1.5rem" class="clicks-icon" />
+        <span>{{ data?.clicks }} clicks</span>
       </div>
       <div class="date">
         {{ formattedDate }}
       </div>
     </div>
-    <q-icon
-      name="delete"
-      :loading="isLoading"
-      :disable="isLoading"
-      class="delete-icon"
-      @click="emitDelete"
-    />
+    <div class="row justify-center full-width">
+      <q-icon
+        name="delete"
+        :loading="isLoading"
+        :disable="isLoading"
+        size="2rem"
+        class="delete-icon"
+        @click="emitDelete"
+      />
+    </div>
   </div>
 </template>
 
@@ -58,6 +68,8 @@ export default defineComponent({
 
     const name = computed(() => userStore.getUser?.fullName);
 
+    const data = computed(() => props.urlData);
+
     const formattedDate = computed(() => {
       const options = {
         year: 'numeric',
@@ -69,13 +81,13 @@ export default defineComponent({
         hour12: false,
       };
       return new Intl.DateTimeFormat('ru-RU', options).format(
-        new Date(props.urlData?.createdAt as Date)
+        new Date(data.value?.createdAt as Date)
       );
     });
 
     const copyLink = () => {
       navigator.clipboard
-        .writeText(props.urlData?.shortenedUrl as string)
+        .writeText(data.value?.shortenedUrl as string)
         .then(() => {
           notificationSuccess({
             message: 'Successfully copied to clipboard',
@@ -84,8 +96,12 @@ export default defineComponent({
         .catch((err) => console.error('Could not copy text: ', err));
     };
 
+    const onRedirect = (url: string) => {
+      window.open(url, '_blank');
+    };
+
     const emitDelete = () => {
-      emit('delete', props.urlData?.id);
+      emit('delete', data.value?.id);
     };
 
     return {
@@ -93,6 +109,8 @@ export default defineComponent({
       copyLink,
       emitDelete,
       formattedDate,
+      onRedirect,
+      data,
     };
   },
 });
@@ -106,7 +124,8 @@ export default defineComponent({
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
   font-size: 19px;
 
-  .full-link {
+  .full-link,
+  .short-link {
     font-size: 19px;
     white-space: nowrap;
     overflow: hidden;
@@ -115,7 +134,6 @@ export default defineComponent({
 
   .delete-icon {
     color: $negative;
-    font-size: 25px;
     cursor: pointer;
   }
 
@@ -126,6 +144,7 @@ export default defineComponent({
   .link-icon,
   .clicks-icon {
     color: $primary;
+    font-size: 2rem;
   }
 
   .short-link {
@@ -155,6 +174,12 @@ export default defineComponent({
   .more-btn {
     background-color: $primary;
     color: white;
+  }
+
+  @media (max-width: 600px) {
+    .short-link {
+      margin-left: 0;
+    }
   }
 }
 </style>
