@@ -84,7 +84,7 @@ export default defineComponent({
         second: '2-digit',
         hour12: false,
       };
-      return new Intl.DateTimeFormat('ru-RU', options).format(
+      return new Intl.DateTimeFormat('en-EN', options).format(
         new Date(data.value?.createdAt as Date)
       );
     });
