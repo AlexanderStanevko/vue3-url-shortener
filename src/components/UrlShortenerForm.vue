@@ -29,9 +29,21 @@
               />
             </div>
           </div>
-          <p v-if="result" class="text-dark text-center">
-            Shortened URL: {{ result }}
-          </p>
+          <div
+            v-if="result"
+            class="text-dark text-center row justify-center items-center"
+          >
+            <q-icon
+              name="content_copy"
+              size="2rem"
+              color="primary"
+              class="link-icon cursor-pointer"
+              @click="copyLink"
+            />
+            <p class="no-margin text-h6">
+              {{ result }}
+            </p>
+          </div>
         </q-form>
       </template>
       <template #footer>
@@ -101,6 +113,16 @@ export default defineComponent({
         isLoading.value = false;
       }
     };
+    const copyLink = () => {
+      navigator.clipboard
+        .writeText(result.value)
+        .then(() => {
+          notificationSuccess({
+            message: 'Successfully copied to clipboard',
+          });
+        })
+        .catch((err) => console.error('Could not copy text: ', err));
+    };
 
     const onSubmit = async () => {
       const res = await onCreate();
@@ -110,6 +132,8 @@ export default defineComponent({
           message: 'The URL was successfully shortened',
         });
 
+        copyLink();
+
         onReset();
       }
     };
@@ -118,6 +142,7 @@ export default defineComponent({
       url,
       onSubmit,
       onReset,
+      copyLink,
       result,
       urlFieldRules,
       urlInput,
