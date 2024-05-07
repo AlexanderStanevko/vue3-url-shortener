@@ -19,10 +19,17 @@ const namespace = {
 };
 
 const apiURL = {
-  dev: 'http://167.99.138.46:3000/',
-  test: 'http://167.99.138.46:3000/',
-  prod: 'http://167.99.138.46:3000/',
+  dev: 'https://tsup.zapto.org/',
+  test: 'https://tsup.zapto.org/',
+  prod: 'https://tsup.zapto.org/',
 };
+
+
+// const apiURL = {
+//   dev: 'http://167.99.138.46:3000/',
+//   test: 'http://167.99.138.46:3000/',
+//   prod: 'http://167.99.138.46:3000/',
+// };
 
 module.exports = configure((ctx) => {
   return {
