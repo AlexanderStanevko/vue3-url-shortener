@@ -42,16 +42,6 @@
             <q-item
               v-close-popup
               clickable
-              @click="goToSettings"
-            >
-              <q-item-section avatar>
-                <q-icon name="settings" />
-              </q-item-section>
-              <q-item-section> Settings </q-item-section>
-            </q-item>
-            <q-item
-              v-close-popup
-              clickable
               @click="onLogout"
             >
               <q-item-section avatar>
@@ -90,9 +80,6 @@ export default defineComponent({
     const accountLabel = computed(() =>
       isDesktop.value ? userStore.getUser?.fullName : ''
     );
-    const goToSettings = () => {
-      router.push('/settings');
-    };
 
     const goHome = () => {
       router.push('/');
@@ -111,7 +98,6 @@ export default defineComponent({
       menuOpen,
       mainLabel,
       accountLabel,
-      goToSettings,
       onLogout,
       toggleMenu,
       goHome,
