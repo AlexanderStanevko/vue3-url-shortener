@@ -97,7 +97,6 @@ export default defineComponent({
         });
 
         return res;
-
       } catch (error) {
         console.error(error);
       } finally {
@@ -106,7 +105,8 @@ export default defineComponent({
     };
 
     const onSubmit = async () => {
-      const res = await onLogin()
+      const res = await onLogin();
+      console.log('LOGN: ', res);
       if (res?.success) {
         notificationSuccess({
           message: 'You have successfully logged in',

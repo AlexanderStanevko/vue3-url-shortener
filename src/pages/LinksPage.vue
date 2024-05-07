@@ -5,6 +5,7 @@
       <q-form class="form-container" @submit.prevent="onSubmit">
         <div class="row justify-center gap__10">
           <q-select
+            v-if="false"
             v-model="selectedDomain"
             filled
             :options="domains"
