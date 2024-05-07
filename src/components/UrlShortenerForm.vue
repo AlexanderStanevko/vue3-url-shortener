@@ -47,9 +47,9 @@
 <script lang="ts">
 import { QInput } from 'quasar';
 import { ref, defineComponent, nextTick } from 'vue';
+import { useUrlShortenerStore } from 'stores/UrlShortenerStore';
 import { notificationSuccess } from 'utils/notifications';
 import { urlFieldRules } from 'utils/rules';
-import { urlShortener } from 'utils/urlShortener';
 import AppCard from 'components/App/AppCard.vue';
 import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
 
@@ -70,9 +70,12 @@ export default defineComponent({
     },
   },
   setup() {
+    const urlStore = useUrlShortenerStore();
+
     const url = ref('');
     const result = ref('');
     const urlInput = ref<InstanceType<typeof QInput> | null>(null);
+    const isLoading = ref(false);
 
     const onReset = async () => {
       url.value = '';
@@ -81,10 +84,28 @@ export default defineComponent({
         await nextTick();
       }
     };
+    const onCreate = async () => {
+      if (!url.value) return;
 
-    const onSubmit = () => {
-      result.value = urlShortener(url.value);
-      if (result.value) {
+      try {
+        isLoading.value = true;
+
+        const res = await urlStore.createShortUrl({
+          originalUrl: url.value,
+        });
+
+        return res;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        isLoading.value = false;
+      }
+    };
+
+    const onSubmit = async () => {
+      const res = await onCreate();
+      if (res) {
+        result.value = res.urlData?.shortenedUrl as string;
         notificationSuccess({
           message: 'The URL was successfully shortened',
         });

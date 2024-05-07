@@ -90,7 +90,6 @@ export default defineComponent({
     };
 
     const onCreate = async () => {
-      debugger;
       if (!url.value) return;
 
       try {
@@ -131,7 +130,6 @@ export default defineComponent({
     };
 
     const onSubmit = async () => {
-      debugger;
       const res = await onCreate();
       if (res) {
         notificationSuccess({
