@@ -100,5 +100,12 @@ export const useUrlShortenerStore = defineStore({
         pathParam: shortenedCode,
       });
     },
+
+    clear() {
+      this.urlList = [];
+      this.mostActiveLinks = [];
+      this.totalClicks = 0;
+      this.uniqueClicks = 0;
+    },
   },
 });
