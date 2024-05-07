@@ -14,6 +14,7 @@
             dense
           />
           <q-input
+            ref="urlInput"
             v-model="url"
             filled
             placeholder="Enter a link to shorten it"
@@ -52,9 +53,9 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { QInput } from 'quasar';
+import { computed, defineComponent, onMounted, ref, nextTick } from 'vue';
 import { useUrlShortenerStore } from 'stores/UrlShortenerStore';
-import { useUserStore } from 'stores/UserStore';
 import { notificationSuccess } from 'utils/notifications';
 import { urlFieldRules } from 'utils/rules';
 import LinkDisplayCard from 'components/LinkDisplayCard.vue';
@@ -66,17 +67,26 @@ export default defineComponent({
     LinkDisplayCard,
   },
   setup() {
-    const userStore = useUserStore();
     const urlStore = useUrlShortenerStore();
-    const userName = ref(userStore.getUser?.fullName);
     const url = ref('');
     const isLoading = ref(false);
     const isDeletingUrl = ref(false);
+    const urlInput = ref<InstanceType<typeof QInput> | null>(null);
 
     const urlList = computed(() => urlStore.getAllUrls);
 
     const domains = ['http://short.est', 'http://short.ly'];
     const selectedDomain = ref(domains[0]);
+
+    const onReset = async () => {
+      url.value = '';
+
+      await nextTick();
+
+      if (urlInput.value && urlInput.value.resetValidation) {
+        urlInput.value.resetValidation();
+      }
+    };
 
     const onGetAll = async () => {
       try {
@@ -135,6 +145,8 @@ export default defineComponent({
         notificationSuccess({
           message: 'The URL was successfully shortened',
         });
+
+        onReset();
       }
     };
 
@@ -144,7 +156,6 @@ export default defineComponent({
 
     return {
       ...responsive,
-      userName,
       selectedDomain,
       url,
       domains,
@@ -154,6 +165,7 @@ export default defineComponent({
       urlList,
       isLoading,
       isDeletingUrl,
+      urlInput,
     };
   },
 });

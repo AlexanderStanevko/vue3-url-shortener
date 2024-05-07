@@ -12,16 +12,24 @@ export const emailFieldRules = [
   (val: string) => isValidEmail(val) || 'Please enter a valid email!',
 ];
 
-export const isValidUrl = (url: string): boolean => {
-  return validator.isURL(url, {
+export const isValidUrl = (url: string): string | true => {
+  if (!url) {
+    return 'URL is required!';
+  }
+
+  if (!validator.isURL(url, {
     require_protocol: true,
     allow_underscores: true,
-  });
+  })) {
+    return 'Please enter a valid URL!';
+  }
+
+  return true;
 };
 
 export const urlFieldRules = [
   (val: string) => (val && val.length) || 'Field is required!',
-  isValidUrl,
+  (val: string) => isValidUrl(val) || 'Please enter a valid URL!',
 ];
 
 export const isValidPhone = (phone: string): string | true => {

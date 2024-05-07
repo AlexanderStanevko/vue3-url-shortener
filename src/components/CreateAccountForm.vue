@@ -149,12 +149,8 @@ export default defineComponent({
         notificationSuccess({
           message: 'Your account has been successfully created',
         });
-      } else {
-        errorAlert({
-          message: 'Smth went Wrong',
-        });
-        return;
       }
+      
       router.push({ name: 'Dashboard' });
     };
 

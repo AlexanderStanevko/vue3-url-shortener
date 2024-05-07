@@ -17,65 +17,6 @@ type HandleAPIRequestArgs<T> = {
 
 type ExtendedResponse<T> = T & ErrorResponse;
 
-// export const handleAPIRequest = async <
-//   ResponseType,
-//   RequestBodyType = undefined
-// >({
-//   controller = 'short',
-//   method = '',
-//   httpMethod = 'post',
-//   body = null,
-//   params = {},
-//   baseURL = process.env.API_URL,
-//   headers = {},
-// }: HandleAPIRequestArgs<RequestBodyType>): Promise<
-//   Nullable<ExtendedResponse<ResponseType>>
-// > => {
-//   try {
-//     const url = controller ? `${controller}/${method}` : method;
-//     const axiosConfig: AxiosRequestConfig = {
-//       baseURL,
-//       headers: {
-//         'Content-Type': 'application/json',
-//         ...headers,
-//       },
-//       params,
-//     };
-
-//     const jwt = SessionStorage.get(JWT_STORAGE_KEY);
-//     if (jwt && axiosConfig.headers) {
-//       axiosConfig.headers.Authorization = `Bearer ${jwt}`;
-//     }
-
-//     console.log(
-//       `Sending ${httpMethod.toUpperCase()} request to ${url} with params:`,
-//       params
-//     );
-
-//     const response = await axios({
-//       method: httpMethod,
-//       url: url,
-//       ...(httpMethod === 'get' || httpMethod === 'delete'
-//         ? { params: params }
-//         : { data: body }),
-//       ...axiosConfig,
-//     });
-
-//     if (response.data.error) {
-//       const message = response.data.error.message || response.data.error;
-//       throw new Error(message);
-//     }
-
-//     return response.data;
-//   } catch (error: unknown) {
-//     const message = String(error);
-//     console.error(
-//       `Error during ${httpMethod.toUpperCase()} request`
-//     );
-//     errorAlert({ message });
-//     return null;
-//   }
-// };
 export const handleAPIRequest = async <
   ResponseType,
   RequestBodyType = undefined
@@ -92,6 +33,7 @@ export const handleAPIRequest = async <
   Nullable<ExtendedResponse<ResponseType>>
 > => {
   try {
+    debugger;
     const url = controller ? `${controller}/${pathParam || method}` : method;
     const axiosConfig: AxiosRequestConfig = {
       baseURL,
@@ -126,7 +68,7 @@ export const handleAPIRequest = async <
 
     return response.data;
   } catch (error: unknown) {
-    const message = String(error);
+    const message = String(error.response.data.message);
     console.error(`Error during ${httpMethod.toUpperCase()} request`);
     errorAlert({ message });
     return null;

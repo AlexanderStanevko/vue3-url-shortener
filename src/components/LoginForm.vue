@@ -111,12 +111,9 @@ export default defineComponent({
         notificationSuccess({
           message: 'You have successfully logged in',
         });
-      } else {
-        errorAlert({
-          message: 'Wrong credentials',
-        });
-        return;
       }
+
+      
       router.push({ name: 'Dashboard' });
     };
 
