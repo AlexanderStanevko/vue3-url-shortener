@@ -61,7 +61,7 @@
 import { ref, defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from 'stores/UserStore';
-import { notificationSuccess, errorAlert } from 'utils/notifications';
+import { notificationSuccess } from 'utils/notifications';
 import { emailFieldRules, passwordFieldRules } from 'utils/rules';
 import AppCard from 'components/App/AppCard.vue';
 import AppRoundedBtn from 'components/App/AppRoundedBtn.vue';
@@ -113,7 +113,7 @@ export default defineComponent({
         });
       }
 
-      
+
       router.push({ name: 'Dashboard' });
     };
 
